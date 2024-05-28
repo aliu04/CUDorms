@@ -1,7 +1,7 @@
 import './App.css';
 import searchIcon from './assets/search.png';
 import { useState, useEffect } from 'react';
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 //defining interface of dorm
 interface Dorm {
