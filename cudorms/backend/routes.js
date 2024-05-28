@@ -18,3 +18,25 @@ router.get("/", async (request, response) => {
 });
 
 export default router;
+
+
+//Route for adding a new dorm
+router.post("/", async (request, response) => {
+  try {
+    if (
+      !request.body.name
+    ) {
+      return response.status(400).send({
+        message: "Send all required fields: dorm name",
+      });
+    }
+    const newDorm = {
+      name: request.body.name,
+    };
+    const dorm = await Dorm.create(newDorm);
+    return response.status(201).send(dorm);
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
