@@ -40,3 +40,16 @@ router.post("/", async (request, response) => {
     response.status(500).send({ message: error.message });
   }
 });
+
+//Route for getting a specific dorm
+router.get("/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
+    const dorm = await Dorm.findById(id);
+    return response.status(200).json(dorm);
+  }
+  catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
