@@ -2,11 +2,15 @@ import searchIcon from '../assets/search.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Dorm } from '../interfaces';
+import { ChangeEvent } from 'react';
+
 
 
 function Overview() {
   // Use the interface with useState
   const [dorms, getDorms] = useState<Dorm[]>([]);
+  const [searchBar, setSearchBar] = useState('');
+
 
   //gets all dorms using endpoint (stored in array called dorms)
   useEffect(() => {
@@ -27,6 +31,14 @@ function Overview() {
 
   }, []);
 
+  const handleSearchBar = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchBar(event.target.value);
+  };
+
+  const searchedDorms = dorms.filter(dorm =>
+    dorm.name.toLowerCase().includes(searchBar.toLowerCase())
+  );
+
   return (
     <>
       <h1>CUDorms</h1>
@@ -35,14 +47,15 @@ function Overview() {
           <div className="input-box">
             <img className="search-icon" src={searchIcon} />
             <input placeholder="Enter a dorm"
-              id="filter-text-val" />
+              id="filter-text-val"
+              onChange={handleSearchBar} />
           </div>
         </form>
       </div>
       <div>
-        {dorms.length > 0 ? (
+        {searchedDorms.length > 0 ? (
           <ul>
-            {dorms.map((dorm) => (
+            {searchedDorms.map((dorm) => (
               <li key={dorm._id} className='dorm-elt'>
                 <Link to={`/dorms/${dorm._id}`}>{dorm.name}</Link>
               </li>
