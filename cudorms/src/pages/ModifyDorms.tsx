@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Dorm } from "../interfaces";
+import { Link } from "react-router-dom";
 
 function ModifyDorms() {
   // Use the interface with useState
@@ -27,7 +28,7 @@ function ModifyDorms() {
 
   function handleAddDorms() {
     const data = {
-      name
+      name,
     };
     fetch('http://localhost:4000/dorms', {
       method: 'POST',
@@ -56,7 +57,7 @@ function ModifyDorms() {
           <ul>
             {dorms.map((dorm) => (
               <li key={dorm._id} className='dorm-elt'>
-                {dorm.name}
+                <Link to={`/admin/dorms/${dorm._id}`}>{dorm.name}</Link>
               </li>
             ))}
           </ul>

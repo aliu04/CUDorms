@@ -22,7 +22,10 @@ function DormDetails() {
       })
   }, [id]);
   return (
-    <h1>{dorm.name}</h1>
+    <>
+      <h1>{dorm.name}</h1>
+      <p> address: {dorm.address}</p>
+    </>
   )
 
 }
