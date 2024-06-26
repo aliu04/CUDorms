@@ -24,7 +24,7 @@ export default router;
 router.post("/", async (request, response) => {
   try {
     if (
-      !request.body.name || !request.body.address
+      !request.body.name
     ) {
       return response.status(400).send({
         message: "Send all required fields: dorm name",
@@ -32,8 +32,9 @@ router.post("/", async (request, response) => {
     }
     const newDorm = {
       name: request.body.name,
-      address: request.body.address,
+      address: request.body.address || null
     };
+
     const dorm = await Dorm.create(newDorm);
     return response.status(201).send(dorm);
   } catch (error) {
