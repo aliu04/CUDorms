@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dorm } from '../interfaces';
+import { useNavigate } from 'react-router-dom';
+
 function EditDorm() {
   const [dorm, setDorm] = useState<Dorm[]>([]);
   const [editVersion, setEditVersion] = useState<boolean>(false);
   const [newAddress, setNewAddress] = useState<string>('');
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:4000/dorms/${id}`)
@@ -29,6 +32,21 @@ function EditDorm() {
   };
   const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewAddress(event.target.value);
+  };
+
+  const handleDelete = () => {
+    fetch(`http://localhost:4000/dorms/${id}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Delete request failed');
+        }
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   function handleSubmit() {
@@ -75,6 +93,7 @@ function EditDorm() {
           <button onClick={handleEdit}>Edit</button>
         </>
       )}
+      <button onClick={handleDelete}>Delete</button>
     </>
   );
 }

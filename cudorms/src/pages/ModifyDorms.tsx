@@ -42,6 +42,10 @@ function ModifyDorms() {
         return response.json();
       })
       .then(data => {
+        if (data && data.dorm) {
+          getDorms([...dorms, data.dorm]);
+          setName('')
+        }
         console.log(data)
       })
       .catch((error) => {
