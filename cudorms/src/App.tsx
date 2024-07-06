@@ -5,8 +5,6 @@ import DormDetails from "./pages/DormDetails"
 import ModifyDorms from "./pages/ModifyDorms"
 import EditDorm from "./pages/EditDorm"
 
-
-
 export default function App() {
   return (
     <Router>

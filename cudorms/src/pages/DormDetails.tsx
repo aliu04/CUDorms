@@ -4,8 +4,9 @@ import { Dorm } from '../interfaces';
 
 
 function DormDetails() {
-  const [dorm, setDorm] = useState<Dorm[]>([]);
+  const [dorm, setDorm] = useState<Dorm | null>(null);
   const { id } = useParams<{ id: string }>();
+
   useEffect(() => {
     fetch(`http://localhost:4000/dorms/${id}`)
       .then((response) => {
@@ -21,10 +22,18 @@ function DormDetails() {
         console.log('Fetch error:', error);
       })
   }, [id]);
+
+  if (!dorm) return <p>No dorm data found</p>;
+
   return (
     <>
+      {/* still need to show images*/}
       <h1>{dorm.name}</h1>
-      <p> address: {dorm.address}</p>
+      <p>Street Address: {dorm.address.address}</p>
+      <p>Coordinates: {'(' + dorm.address.coordinates.join(', ') + ')'}</p>
+      <p>Location: {dorm.location}</p>
+      <p>Rating: {dorm.rating}</p>
+      <p>Availability: {dorm.availability.join(', ')}</p>
     </>
   )
 

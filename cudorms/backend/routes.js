@@ -8,10 +8,9 @@ router.get("/", async (request, response) => {
     const dorms = await Dorm.find({});
     return response.status(200).json({
       count: dorms.length,
-      data: dorms
+      data: dorms,
     });
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
   }
@@ -19,20 +18,21 @@ router.get("/", async (request, response) => {
 
 export default router;
 
-
 //Route for adding a new dorm
 router.post("/", async (request, response) => {
   try {
-    if (
-      !request.body.name
-    ) {
+    if (!request.body.name) {
       return response.status(400).send({
         message: "Send all required fields: dorm name",
       });
     }
     const newDorm = {
       name: request.body.name,
-      address: request.body.address || null
+      location: request.body.location || null,
+      address: request.body.address || null,
+      images: request.body.images || null,
+      rating: request.body.rating || null,
+      availability: request.body.availability || null,
     };
 
     const dorm = await Dorm.create(newDorm);
@@ -49,8 +49,7 @@ router.get("/:id", async (request, response) => {
     const { id } = request.params;
     const dorm = await Dorm.findById(id);
     return response.status(200).json(dorm);
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
   }
@@ -60,40 +59,50 @@ router.get("/:id", async (request, response) => {
 router.put("/:id", async (request, response) => {
   try {
     const { id } = request.params;
-    const { name, address } = request.body;
-    if (!name && !address) {
-      return response.status(400).json({ message: "Name or address are required" });
+    const { name, address, location, images, rating, availability } =
+      request.body;
+    if (!name && !address && !location && !images && !rating && !availability) {
+      return response.status(400).json({
+        message:
+          "At least one field (name, address, location, images, rating, availability) is required",
+      });
     }
     const updatedFields = {};
     if (name) updatedFields.name = name;
     if (address) updatedFields.address = address;
+    if (location) updatedFields.location = location;
+    if (images) updatedFields.images = images;
+    if (rating) updatedFields.rating = rating;
+    if (availability) updatedFields.availability = availability;
 
-    const updatedDorm = await Dorm.findByIdAndUpdate(id, updatedFields, { new: true });
+    const updatedDorm = await Dorm.findByIdAndUpdate(id, updatedFields, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedDorm) {
       return response.status(404).json({ message: "Dorm not found" });
     }
+
     return response.status(200).json(updatedDorm);
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
   }
 });
 
 //Route for deleting a specific dorm
-router.delete('/:id', async (request, response) => {
+router.delete("/:id", async (request, response) => {
   try {
     const { id } = request.params;
     const result = await Dorm.findByIdAndDelete(id);
 
     if (!result) {
-      return response.status(404).json({ message: 'Dorm not found' });
+      return response.status(404).json({ message: "Dorm not found" });
     }
-    return response.status(200).send({ message: 'Dorm deleted successfully' });
+    return response.status(200).send({ message: "Dorm deleted successfully" });
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
   }
-
 });

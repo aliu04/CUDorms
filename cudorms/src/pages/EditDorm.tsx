@@ -4,9 +4,9 @@ import { Dorm } from '../interfaces';
 import { useNavigate } from 'react-router-dom';
 
 function EditDorm() {
-  const [dorm, setDorm] = useState<Dorm[]>([]);
+  const [dorm, setDorm] = useState<Dorm | null>();
   const [editVersion, setEditVersion] = useState<boolean>(false);
-  const [newAddress, setNewAddress] = useState<string>('');
+  const [newLocation, setNewLocation] = useState<string>('');
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -26,12 +26,14 @@ function EditDorm() {
       })
   }, [id]);
 
+  if (!dorm) return <p>No dorm data found</p>;
+
   const handleEdit = () => {
     setEditVersion(true);
-    setNewAddress(dorm.address);
+    setNewLocation(dorm.location);
   };
-  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewAddress(event.target.value);
+  const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewLocation(event.target.value);
   };
 
   const handleDelete = () => {
@@ -51,7 +53,7 @@ function EditDorm() {
 
   function handleSubmit() {
     const data = {
-      address: newAddress
+      location: newLocation
     };
     fetch(`http://localhost:4000/dorms/${id}`, {
       method: 'PUT',
@@ -66,6 +68,7 @@ function EditDorm() {
       })
       .then(updatedDorm => {
         console.log(data)
+        setDorm(updatedDorm);
         setEditVersion(false);
       })
       .catch((error) => {
@@ -73,6 +76,7 @@ function EditDorm() {
         console.log(error);
       })
   };
+  
   return (
     <>
       <h1>Dorm Info</h1>
@@ -81,15 +85,14 @@ function EditDorm() {
         <>
           <input
             type="text"
-            value={newAddress}
-            onChange={handleAddressChange}
-            placeholder="Enter new address" />
-
+            value={newLocation}
+            onChange={handleLocationChange}
+            placeholder="Enter new location" />
           <button onClick={handleSubmit}>Save</button>
         </>
       ) : (
         <>
-          <p> Address: {dorm.address}</p>
+          <p> Location: {dorm.location}</p>
           <button onClick={handleEdit}>Edit</button>
         </>
       )}
