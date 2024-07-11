@@ -56,6 +56,7 @@ function Overview() {
           </div>
         </form>
       </div>
+      
       <div>
         {searchedDorms.length > 0 ? (
           <ul>

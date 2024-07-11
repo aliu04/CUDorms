@@ -30,10 +30,9 @@ body {
   width:100%;
 }
 
-.navbar-title {
-  margin: 0;
-  font-size: 3rem;
-  color:black
+.navbar-logo {
+  width: 38%;
+  height: auto;
 }
 
 .nav-links {
