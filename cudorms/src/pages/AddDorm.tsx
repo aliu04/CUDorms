@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NavBar from '../components/NavBar'
 
 function AddDorm() {
   const navigate = useNavigate()
@@ -51,9 +52,10 @@ function AddDorm() {
         alert('error');
         console.log(error);
       })
-  };
+  }
   return (
     <>
+      <NavBar/>
       <form className="form-new-dorm">
         <label htmlFor="add-name">Name</label>
         <input className="add-name" type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />

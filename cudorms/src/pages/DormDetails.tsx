@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dorm } from '../interfaces';
+import NavBar from '../components/NavBar'
 
 
 function DormDetails() {
@@ -28,6 +29,7 @@ function DormDetails() {
   return (
     <>
       {/* still need to show images*/}
+      <NavBar/>
       <h1>{dorm.name}</h1>
       <p>Street Address: {dorm.address.address}</p>
       <p>Coordinates: {'(' + dorm.address.coordinates.join(', ') + ')'}</p>

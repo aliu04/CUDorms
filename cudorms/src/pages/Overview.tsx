@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Dorm } from '../interfaces';
 import { ChangeEvent } from 'react';
 
-
+import NavBar from '../components/NavBar'
 
 function Overview() {
   // Use the interface with useState
@@ -41,7 +41,11 @@ function Overview() {
 
   return (
     <>
-      <h1>CUDorms</h1>
+      <NavBar/>
+      <span/>
+      <span/>
+      <span/>
+    
       <div>
         <form id="form">
           <div className="input-box">
