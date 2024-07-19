@@ -8,17 +8,17 @@ body, head {
   overflow-x: hidden;
 }
 
-p {
+.overview-text {
   text-align: center;
   font-family: "Montserrat";
   font-weight: bold;
   font-size: 30px;
+  color: #FFE8E8;
 }
 
 :root {
   background-color: #B86565;
-  color: #FFE8E8;
-
+  font-family: "Montserrat";
 }
 
 /* SEARCH BAR STYLING */
@@ -175,4 +175,61 @@ p {
   font-weight: bold;
   margin: 0;
   text-wrap: nowrap;
+}
+
+/* Dorm Details Styling */
+.dorm-header-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dorm-title {
+  font-size: 75px;
+  font-weight: bold;
+  margin: 0;
+  text-wrap: nowrap;
+  color: #FFE8E8;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+.dorm-rating {
+  display: flex;
+  color: #FFE8E8;
+  font-size: 75px;
+  font-weight: bold;
+  margin: 0;
+  padding-top: 20px;
+  margin-left: auto;
+  padding-right: 10px;
+}
+
+.dorm-rating-2 {
+  color: #C2A2A2;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
+  padding-top:0;
+  padding-right: 50px;
+}
+
+.dorm-address {
+  font-size: 18px;
+  font-weight: bold;
+  font-style: italic;
+  color: #C2A2A2;
+  padding-left: 30px;
+  margin-top: 3px;
+}
+
+.dorm-location {
+  font-size: 18px;
+  font-weight: bold;
+  color: #332121;
+  padding-left: 100px;
+  padding-top: 0px;
 }

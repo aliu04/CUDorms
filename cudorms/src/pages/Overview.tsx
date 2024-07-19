@@ -58,7 +58,7 @@ function Overview() {
           </div>
           </div>
         ) : (
-          <p>No dorms found.</p>
+          <p className = "overview-text">No dorms found.</p>
         )}
       </div>
     </>
