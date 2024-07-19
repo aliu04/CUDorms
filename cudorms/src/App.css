@@ -1,18 +1,54 @@
-body {
+/* imports Montserrat text font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body, head {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
 :root {
-  background-color: rgb(196, 229, 229);
+  background-color: #B86565;
+  
 }
 
-.input-box {
-  background-color: white;
+.search-title {
+  font-family: 'Montserrat';
+  font-weight: bold;
+  color: #FFE8E8;
+  text-align: center;
+  font-size: 45px;
+  padding-top: 55px;
+  padding-bottom: 20px;
+}
+
+#form {
   display: flex;
-  height: 40px;
-  margin-top: 1rem;
+  justify-content: center; 
+  align-items: center;    
+  width: 100%;
+}
+
+#form input {
+  padding: 15px;
+  width: 500px; 
+  border: none; 
+  border-radius: 100px; 
+  font-size: 18px;
+  background-color: #f9eae0; 
+  text-align: center;
+  outline: none; 
+  box-shadow: none; 
+}
+
+#form input::placeholder {
+  color: #585858;
+  transition: color 0.3s ease;
+  font-family: 'Montserrat';
+}
+
+#form input:focus::placeholder {
+  color: transparent; 
 }
 
 /* NAVIGATION BAR STYLING */
@@ -63,4 +99,59 @@ body {
   background: #ffffff;
   border-color: #292929;
   color: #292929;
+}
+
+/* DORM CARD STYLING */
+
+
+.dorm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 250px);
+  gap: 2rem;
+  padding: 1rem;
+  justify-content: center;
+  max-width: 1200px;
+  width:100%;
+  align-items: center;
+}
+
+.dorm-card {
+  background-color: #D9D9D9;
+  border-radius: 16px; 
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .2);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.dorm-card:hover {
+  transform: scale(1.06);
+}
+
+.dorm-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.dorm-card-info {
+  background-color: #5C3B3B; /* Darker background for the title section */
+  color: #D9D9D9;
+  padding: 1rem;
+  text-align: center;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.dorm-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
 }
