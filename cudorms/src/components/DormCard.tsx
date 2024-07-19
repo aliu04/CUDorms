@@ -1,4 +1,5 @@
 import "../App.css";
+import { Link } from 'react-router-dom';
 import { Dorm } from '../interfaces';
 
 interface DormCardProps {
@@ -7,12 +8,12 @@ interface DormCardProps {
 
 const DormCard: React.FC<DormCardProps> = ({ dorm }) => {
   return (
-    <div key = {dorm._id} className = "dorm-card">
+    <Link key = {dorm._id} to={`/dorms/${dorm._id}`} className = "dorm-card">
       <img src={dorm.images[0]} alt={dorm.name} />
       <span className = "dorm-card-info">
         <h3 className="dorm-card-title"> {dorm.name} </h3>
       </span>
-    </div>
+    </Link>
   )
 }
 

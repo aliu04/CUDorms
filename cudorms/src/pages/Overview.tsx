@@ -1,4 +1,3 @@
-import searchIcon from '../assets/search.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Dorm } from '../interfaces';
@@ -51,22 +50,16 @@ function Overview() {
       
       <div>
         {searchedDorms.length > 0 ? (
-          <ul>
+          <div className = 'grid-container'>
+          <div className="dorm-grid">
             {searchedDorms.map((dorm) => (
-              <li key={dorm._id} className='dorm-elt'>
-                <Link to={`/dorms/${dorm._id}`}>{dorm.name}</Link>
-              </li>
+              <DormCard dorm={dorm} key={dorm._id}/>
             ))}
-          </ul>
+          </div>
+          </div>
         ) : (
           <p>No dorms found.</p>
         )}
-      </div>
-
-      <div className="dorm-grid">
-        {searchedDorms.map((dorm) => (
-          <DormCard dorm={dorm} key={dorm._id}/>
-        ))}
       </div>
     </>
   )
