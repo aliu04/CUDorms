@@ -28,6 +28,7 @@ router.post("/", async (request, response) => {
     }
     const newDorm = {
       name: request.body.name,
+      description: request.body.summary,
       location: request.body.location || null,
       address: request.body.address || null,
       images: request.body.images || null,
@@ -59,16 +60,17 @@ router.get("/:id", async (request, response) => {
 router.put("/:id", async (request, response) => {
   try {
     const { id } = request.params;
-    const { name, address, location, images, rating, availability } =
+    const { name, address, description, location, images, rating, availability } =
       request.body;
-    if (!name && !address && !location && !images && !rating && !availability) {
+    if (!name && !description && !address && !location && !images && !rating && !availability) {
       return response.status(400).json({
         message:
-          "At least one field (name, address, location, images, rating, availability) is required",
+          "At least one field (name, description, address, location, images, rating, availability) is required",
       });
     }
     const updatedFields = {};
     if (name) updatedFields.name = name;
+    if (description) updatedFields.description = description;
     if (address) updatedFields.address = address;
     if (location) updatedFields.location = location;
     if (images) updatedFields.images = images;
