@@ -1,10 +1,9 @@
-import searchIcon from '../assets/search.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Dorm } from '../interfaces';
 import { ChangeEvent } from 'react';
-
-
+import DormCard from '../components/DormCard';
+import NavBar from '../components/NavBar';
 
 function Overview() {
   // Use the interface with useState
@@ -41,28 +40,25 @@ function Overview() {
 
   return (
     <>
-      <h1>CUDorms</h1>
+      <NavBar/>
+      <h1 className = 'search-title'> Find your Dorm </h1>
       <div>
         <form id="form">
-          <div className="input-box">
-            <img className="search-icon" src={searchIcon} />
-            <input placeholder="Enter a dorm"
-              id="filter-text-val"
-              onChange={handleSearchBar} />
-          </div>
+            <input placeholder="Enter a dorm" id="filter-text-val" onChange={handleSearchBar} />
         </form>
       </div>
+      
       <div>
         {searchedDorms.length > 0 ? (
-          <ul>
+          <div className = 'grid-container'>
+          <div className="dorm-grid">
             {searchedDorms.map((dorm) => (
-              <li key={dorm._id} className='dorm-elt'>
-                <Link to={`/dorms/${dorm._id}`}>{dorm.name}</Link>
-              </li>
+              <DormCard dorm={dorm} key={dorm._id}/>
             ))}
-          </ul>
+          </div>
+          </div>
         ) : (
-          <p>No dorms found.</p>
+          <p className = "overview-text">No dorms found.</p>
         )}
       </div>
     </>

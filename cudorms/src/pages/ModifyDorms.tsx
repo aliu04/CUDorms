@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Dorm } from "../interfaces";
 import { Link, useNavigate } from "react-router-dom";
 
+import NavBar from '../components/NavBar'
+
 function ModifyDorms() {
   const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ function ModifyDorms() {
 
   return (
     <div>
+      <NavBar/>
       <h1>Behind the scenes page</h1>
       <div>
         {dorms.length > 0 ? (

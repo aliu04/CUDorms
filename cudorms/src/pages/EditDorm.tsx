@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Dorm } from '../interfaces';
 import { useNavigate } from 'react-router-dom';
 
+import NavBar from '../components/NavBar'
+
 function EditDorm() {
   const [dorm, setDorm] = useState<Dorm | null>();
   const [editVersion, setEditVersion] = useState<boolean>(false);
@@ -79,6 +81,7 @@ function EditDorm() {
   
   return (
     <>
+      <NavBar/>
       <h1>Dorm Info</h1>
       <p> Name: {dorm.name}</p>
       {editVersion ? (

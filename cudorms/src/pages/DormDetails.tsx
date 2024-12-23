@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dorm } from '../interfaces';
+import NavBar from '../components/NavBar'
 
 
 function DormDetails() {
@@ -28,11 +29,15 @@ function DormDetails() {
   return (
     <>
       {/* still need to show images*/}
-      <h1>{dorm.name}</h1>
-      <p>Street Address: {dorm.address.address}</p>
+      <NavBar/>
+      <div className = "dorm-header-container">
+        <h1 className = "dorm-title">{dorm.name}</h1>
+        <h1 className = "dorm-rating"> {dorm.rating} </h1>
+        <p className = "dorm-rating-2"> / 5 </p>
+      </div>
+      <p className = "dorm-address"> {dorm.address.address}</p>
+      <p className = 'dorm-location'>{dorm.location}</p>
       <p>Coordinates: {'(' + dorm.address.coordinates.join(', ') + ')'}</p>
-      <p>Location: {dorm.location}</p>
-      <p>Rating: {dorm.rating}</p>
       <p>Availability: {dorm.availability.join(', ')}</p>
     </>
   )

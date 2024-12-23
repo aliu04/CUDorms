@@ -1,9 +1,235 @@
-:root {
-  background-color: rgb(196, 229, 229);
+/* imports Montserrat text font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body, head {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
 }
 
-.input-box {
-  background-color: white;
+.overview-text {
+  text-align: center;
+  font-family: "Montserrat";
+  font-weight: bold;
+  font-size: 30px;
+  color: #FFE8E8;
+}
+
+:root {
+  background-color: #B86565;
+  font-family: "Montserrat";
+}
+
+/* SEARCH BAR STYLING */
+.search-title {
+  font-family: 'Montserrat';
+  font-weight: bold;
+  color: #FFE8E8;
+  text-align: center;
+  font-size: 45px;
+  padding-top: 55px;
+  padding-bottom: 20px;
+}
+
+#form {
   display: flex;
-  height: 40px;
+  justify-content: center; 
+  align-items: center;    
+  width: 100%;
+  padding-bottom: 100px
+}
+
+#form input {
+  padding: 15px;
+  width: 500px; 
+  border: none; 
+  border-radius: 100px; 
+  font-size: 18px;
+  background-color: #f9eae0; 
+  text-align: center;
+  outline: none; 
+  box-shadow: none; 
+  font-family: "Montserrat";
+}
+
+#form input::placeholder {
+  color: #585858;
+  transition: color 0.3s ease;
+  font-family: 'Montserrat';
+}
+
+#form input:focus::placeholder {
+  color: transparent; 
+}
+
+/* NAVIGATION BAR STYLING */
+.nav-bar {
+  background-color: #ea5252;
+  color: #ffffff;
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin:0;
+  border:0;
+  top: 0;
+  left: 0;
+  width:100%;
+}
+
+.navbar-logo {
+  width: 38%;
+  height: auto;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-links li {
+  margin: 0 1rem;
+}
+
+.nav-links a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  border: 1px solid transparent;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+
+.nav-links a:hover,
+.nav-links a:active,
+.nav-links a.active {
+  background: #ffffff;
+  border-color: #292929;
+  color: #292929;
+}
+
+/* DORM CARD STYLING */
+.grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.dorm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 250px);
+  gap: 2.5rem;
+  padding: 1rem;
+  justify-content: center;
+  max-width: 1200px;
+  width:100%;
+  align-items: center;
+}
+
+.dorm-card {
+  background-color: #D9D9D9;
+  border-radius: 16px; 
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .2);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  text-decoration: none;
+  color: inherit;
+}
+
+.dorm-card:hover {
+  transform: scale(1.06);
+}
+
+.dorm-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.dorm-card-info {
+  background-color: #5C3B3B;
+  color: #D9D9D9;
+  padding: 1rem;
+  text-align: center;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.dorm-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem;
+  font-weight: bold;
+  margin: 0;
+  text-wrap: nowrap;
+}
+
+/* Dorm Details Styling */
+.dorm-header-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dorm-title {
+  font-size: 75px;
+  font-weight: bold;
+  margin: 0;
+  text-wrap: nowrap;
+  color: #FFE8E8;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+.dorm-rating {
+  display: flex;
+  color: #FFE8E8;
+  font-size: 75px;
+  font-weight: bold;
+  margin: 0;
+  padding-top: 20px;
+  margin-left: auto;
+  padding-right: 10px;
+}
+
+.dorm-rating-2 {
+  color: #C2A2A2;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
+  padding-top:0;
+  padding-right: 50px;
+}
+
+.dorm-address {
+  font-size: 18px;
+  font-weight: bold;
+  font-style: italic;
+  color: #C2A2A2;
+  padding-left: 30px;
+  margin-top: 3px;
+}
+
+.dorm-location {
+  font-size: 18px;
+  font-weight: bold;
+  color: #332121;
+  padding-left: 100px;
+  padding-top: 0px;
 }
