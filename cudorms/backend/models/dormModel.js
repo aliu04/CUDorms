@@ -11,6 +11,10 @@ const dormSchema = mongoose.Schema(
       type: String,
       maxlength: 1000,
     },
+    description: {
+      type: String,
+      required: false,
+    },
     location: {
       type: String,
       required: false,
@@ -25,7 +29,7 @@ const dormSchema = mongoose.Schema(
         required: false,
         validate: {
           validator: function (arr) {
-            return arr.length === 2;
+            return !arr || arr.length === 2;
           },
           message:
             "Coordinates must be an array of exactly 2 numbers [longitude, latitude]",

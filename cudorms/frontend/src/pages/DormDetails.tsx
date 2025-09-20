@@ -29,16 +29,22 @@ function DormDetails() {
   return (
     <>
       {/* still need to show images*/}
-      <NavBar/>
-      <div className = "dorm-header-container">
-        <h1 className = "dorm-title">{dorm.name}</h1>
-        <h1 className = "dorm-rating"> {dorm.rating} </h1>
-        <p className = "dorm-rating-2"> / 5 </p>
+      <NavBar />
+      <div className="dorm-header-container">
+        <h1 className="dorm-title">{dorm.name}</h1>
+        <h1 className="dorm-description">{dorm.description}</h1>
+        <h1 className="dorm-rating"> {dorm?.rating || "N/A"} </h1>
+        <p className="dorm-rating-2"> / 5 </p>
       </div>
-      <p className = "dorm-address"> {dorm.address.address}</p>
-      <p className = 'dorm-location'>{dorm.location}</p>
-      <p>Coordinates: {'(' + dorm.address.coordinates.join(', ') + ')'}</p>
-      <p>Availability: {dorm.availability.join(', ')}</p>
+      <p className="dorm-address"> {dorm?.address?.address || "N/A"}</p>
+      <p className='dorm-location'>{dorm?.location || "N/A"}</p>
+      <p>
+        Coordinates: {dorm?.address?.coordinates?.length === 2
+          ? `(${dorm.address.coordinates.join(", ")})`
+          : "Not available"}
+      </p>
+      <p>Availability: {dorm?.availability?.length ? dorm.availability.join(", ") : "Not specified"}</p>
+
     </>
   )
 

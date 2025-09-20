@@ -8,6 +8,7 @@
     "backend"
   ],
   "scripts": {
+<<<<<<< HEAD
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run dev",
@@ -19,6 +20,19 @@
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
     "seed": "cd backend && node seed-dorms.js",
     "test:connection": "cd backend && node test-connection.js"
+=======
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.1"
+>>>>>>> 4cb2f91b72b4f923eacc21721a6edfc67f3d9767
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

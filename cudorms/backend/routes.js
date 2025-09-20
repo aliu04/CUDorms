@@ -87,8 +87,20 @@ router.get(
       console.error("Dorms fetch error:", error);
       res.status(500).json({ message: "Server error" });
     }
+<<<<<<< HEAD
   }
 );
+=======
+    const newDorm = {
+      name: request.body.name,
+      description: request.body.summary,
+      location: request.body.location || null,
+      address: request.body.address || null,
+      images: request.body.images || null,
+      rating: request.body.rating || null,
+      availability: request.body.availability || null,
+    };
+>>>>>>> 4cb2f91b72b4f923eacc21721a6edfc67f3d9767
 
 // Route for getting a specific dorm
 router.get("/:id", async (req, res) => {
@@ -139,6 +151,7 @@ router.post(
         });
       }
 
+<<<<<<< HEAD
       const dormData = {
         name: req.body.name,
         description: req.body.description,
@@ -157,13 +170,36 @@ router.post(
       res.status(201).json({
         message: "Dorm created successfully",
         dorm,
+=======
+//Route for updating a specific dorm
+router.put("/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
+    const { name, address, description, location, images, rating, availability } =
+      request.body;
+    if (!name && !description && !address && !location && !images && !rating && !availability) {
+      return response.status(400).json({
+        message:
+          "At least one field (name, description, address, location, images, rating, availability) is required",
+>>>>>>> 4cb2f91b72b4f923eacc21721a6edfc67f3d9767
       });
     } catch (error) {
       console.error("Dorm creation error:", error);
       res.status(500).json({ message: "Server error" });
     }
+<<<<<<< HEAD
   }
 );
+=======
+    const updatedFields = {};
+    if (name) updatedFields.name = name;
+    if (description) updatedFields.description = description;
+    if (address) updatedFields.address = address;
+    if (location) updatedFields.location = location;
+    if (images) updatedFields.images = images;
+    if (rating) updatedFields.rating = rating;
+    if (availability) updatedFields.availability = availability;
+>>>>>>> 4cb2f91b72b4f923eacc21721a6edfc67f3d9767
 
 // Route for updating a specific dorm (admin only)
 router.put("/:id", authenticateToken, requireAdmin, async (req, res) => {

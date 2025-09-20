@@ -12,7 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "bcryptjs": "^3.0.2",
+=======
+    "colors": "^1.4.0",
+>>>>>>> 4cb2f91b72b4f923eacc21721a6edfc67f3d9767
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
