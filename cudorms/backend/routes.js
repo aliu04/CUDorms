@@ -1,108 +1,278 @@
 import express from "express";
+import { body, validationResult, query } from "express-validator";
 import { Dorm } from "./models/dormModel.js";
+import { authenticateToken, requireAdmin } from "./middleware/auth.js";
+
 const router = express.Router();
 
-//Route for getting all dorms
-router.get("/", async (request, response) => {
-  try {
-    const dorms = await Dorm.find({});
-    return response.status(200).json({
-      count: dorms.length,
-      data: dorms,
-    });
-  } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
-  }
-});
+// Route for getting all dorms with filtering and pagination
+router.get(
+  "/",
+  [
+    query("page")
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage("Page must be a positive integer"),
+    query("limit")
+      .optional()
+      .isInt({ min: 1, max: 50 })
+      .withMessage("Limit must be between 1 and 50"),
+    query("year")
+      .optional()
+      .isIn(["freshman", "sophomore", "junior", "senior", "graduate"])
+      .withMessage("Invalid year"),
+    query("search")
+      .optional()
+      .trim()
+      .isLength({ max: 100 })
+      .withMessage("Search term too long"),
+    query("minRating")
+      .optional()
+      .isFloat({ min: 1, max: 5 })
+      .withMessage("Rating must be between 1 and 5"),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
 
-export default router;
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
 
-//Route for adding a new dorm
-router.post("/", async (request, response) => {
-  try {
-    if (!request.body.name) {
-      return response.status(400).send({
-        message: "Send all required fields: dorm name",
+      // Build filter object
+      const filter = {};
+
+      if (req.query.year) {
+        filter.availability = req.query.year;
+      }
+
+      if (req.query.minRating) {
+        filter["rating.average"] = { $gte: parseFloat(req.query.minRating) };
+      }
+
+      if (req.query.search) {
+        filter.$or = [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { description: { $regex: req.query.search, $options: "i" } },
+          { location: { $regex: req.query.search, $options: "i" } },
+        ];
+      }
+
+      // Get dorms with pagination
+      const dorms = await Dorm.find(filter)
+        .sort({ "rating.average": -1, name: 1 })
+        .skip(skip)
+        .limit(limit);
+
+      // Get total count for pagination
+      const total = await Dorm.countDocuments(filter);
+
+      res.json({
+        dorms,
+        pagination: {
+          current: page,
+          pages: Math.ceil(total / limit),
+          total,
+          hasNext: page < Math.ceil(total / limit),
+          hasPrev: page > 1,
+        },
       });
+    } catch (error) {
+      console.error("Dorms fetch error:", error);
+      res.status(500).json({ message: "Server error" });
     }
-    const newDorm = {
-      name: request.body.name,
-      location: request.body.location || null,
-      address: request.body.address || null,
-      images: request.body.images || null,
-      rating: request.body.rating || null,
-      availability: request.body.availability || null,
-    };
+  }
+);
 
-    const dorm = await Dorm.create(newDorm);
-    return response.status(201).send(dorm);
+// Route for getting a specific dorm
+router.get("/:id", async (req, res) => {
+  try {
+    const dorm = await Dorm.findById(req.params.id);
+    if (!dorm) {
+      return res.status(404).json({ message: "Dorm not found" });
+    }
+    res.json(dorm);
   } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
+    console.error("Dorm fetch error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//Route for getting a specific dorm
-router.get("/:id", async (request, response) => {
-  try {
-    const { id } = request.params;
-    const dorm = await Dorm.findById(id);
-    return response.status(200).json(dorm);
-  } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
-  }
-});
+// Route for adding a new dorm (admin only)
+router.post(
+  "/",
+  authenticateToken,
+  requireAdmin,
+  [
+    body("name")
+      .trim()
+      .isLength({ min: 1, max: 100 })
+      .withMessage("Name is required and must be less than 100 characters"),
+    body("description")
+      .optional()
+      .trim()
+      .isLength({ max: 1000 })
+      .withMessage("Description must be less than 1000 characters"),
+    body("location")
+      .optional()
+      .trim()
+      .isLength({ max: 100 })
+      .withMessage("Location must be less than 100 characters"),
+    body("capacity")
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage("Capacity must be a positive integer"),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
 
-//Route for updating a specific dorm
-router.put("/:id", async (request, response) => {
-  try {
-    const { id } = request.params;
-    const { name, address, location, images, rating, availability } =
-      request.body;
-    if (!name && !address && !location && !images && !rating && !availability) {
-      return response.status(400).json({
-        message:
-          "At least one field (name, address, location, images, rating, availability) is required",
+      const dormData = {
+        name: req.body.name,
+        description: req.body.description,
+        location: req.body.location,
+        address: req.body.address,
+        images: req.body.images || [],
+        amenities: req.body.amenities || {},
+        capacity: req.body.capacity,
+        roomTypes: req.body.roomTypes || [],
+        availability: req.body.availability || [],
+        contact: req.body.contact || {},
+        policies: req.body.policies || {},
+      };
+
+      const dorm = await Dorm.create(dormData);
+      res.status(201).json({
+        message: "Dorm created successfully",
+        dorm,
       });
+    } catch (error) {
+      console.error("Dorm creation error:", error);
+      res.status(500).json({ message: "Server error" });
     }
-    const updatedFields = {};
-    if (name) updatedFields.name = name;
-    if (address) updatedFields.address = address;
-    if (location) updatedFields.location = location;
-    if (images) updatedFields.images = images;
-    if (rating) updatedFields.rating = rating;
-    if (availability) updatedFields.availability = availability;
+  }
+);
 
-    const updatedDorm = await Dorm.findByIdAndUpdate(id, updatedFields, {
+// Route for updating a specific dorm (admin only)
+router.put("/:id", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const dorm = await Dorm.findById(req.params.id);
+    if (!dorm) {
+      return res.status(404).json({ message: "Dorm not found" });
+    }
+
+    const updatedDorm = await Dorm.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
 
-    if (!updatedDorm) {
-      return response.status(404).json({ message: "Dorm not found" });
-    }
-
-    return response.status(200).json(updatedDorm);
+    res.json({
+      message: "Dorm updated successfully",
+      dorm: updatedDorm,
+    });
   } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
+    console.error("Dorm update error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//Route for deleting a specific dorm
-router.delete("/:id", async (request, response) => {
+// Route for deleting a specific dorm (admin only)
+router.delete("/:id", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const { id } = request.params;
-    const result = await Dorm.findByIdAndDelete(id);
-
-    if (!result) {
-      return response.status(404).json({ message: "Dorm not found" });
+    const dorm = await Dorm.findById(req.params.id);
+    if (!dorm) {
+      return res.status(404).json({ message: "Dorm not found" });
     }
-    return response.status(200).send({ message: "Dorm deleted successfully" });
+
+    await Dorm.findByIdAndDelete(req.params.id);
+    res.json({ message: "Dorm deleted successfully" });
   } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
+    console.error("Dorm deletion error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
+
+// Route for adding a review to a dorm
+router.post(
+  "/:id/reviews",
+  authenticateToken,
+  [
+    body("rating")
+      .isInt({ min: 1, max: 5 })
+      .withMessage("Rating must be between 1 and 5"),
+    body("comment")
+      .optional()
+      .trim()
+      .isLength({ max: 500 })
+      .withMessage("Comment must be less than 500 characters"),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
+
+      const dorm = await Dorm.findById(req.params.id);
+      if (!dorm) {
+        return res.status(404).json({ message: "Dorm not found" });
+      }
+
+      // Check if user already reviewed this dorm
+      const existingReview = dorm.reviews.find(
+        (review) => review.user.toString() === req.user._id.toString()
+      );
+
+      if (existingReview) {
+        return res
+          .status(400)
+          .json({ message: "You have already reviewed this dorm" });
+      }
+
+      const review = {
+        user: req.user._id,
+        userName: `${req.user.firstName} ${req.user.lastName}`,
+        rating: req.body.rating,
+        comment: req.body.comment || "",
+      };
+
+      dorm.reviews.push(review);
+
+      // Update average rating
+      const totalRating = dorm.reviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
+      dorm.rating.average = totalRating / dorm.reviews.length;
+      dorm.rating.count = dorm.reviews.length;
+
+      await dorm.save();
+
+      res.status(201).json({
+        message: "Review added successfully",
+        review,
+        newAverageRating: dorm.rating.average,
+      });
+    } catch (error) {
+      console.error("Review creation error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
+
+export default router;

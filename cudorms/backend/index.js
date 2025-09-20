@@ -1,8 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import { mongoDBURL, PORT } from "./server/config.js";
 import mongoose from "mongoose";
 import cors from "cors";
-import router from "./routes.js";
+import dormRouter from "./routes.js";
+import authRouter from "./routes/authRoutes.js";
+import blogRouter from "./routes/blogRoutes.js";
 
 const app = express();
 
@@ -11,7 +16,7 @@ app.use(
   cors({
     origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -20,7 +25,10 @@ app.get("/", (request, response) => {
   return response.status(234).send("Welcome To CUDorms");
 });
 
-app.use("/dorms", router);
+// API Routes
+app.use("/api/auth", authRouter);
+app.use("/api/dorms", dormRouter);
+app.use("/api/blogs", blogRouter);
 
 mongoose
   .connect(mongoDBURL)
